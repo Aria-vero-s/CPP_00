@@ -2,10 +2,13 @@
 #include <string>
 #include <iomanip>
 #include <limits>
+#include <algorithm>
 
-#define CYAN    "\033[36m"
-#define RED     "\033[31m"
 #define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define BOLD      "\033[1m"
 
 #define MAX 8
 
@@ -34,6 +37,14 @@ class Phonebook {
     }
 };
 
+bool prompt_line(std::string &input) {
+    if (!std::getline(std::cin, input)) {
+        std::cout << "EOF error (maybe ctrl-D)" << std::endl;
+        return (false);
+    }
+    return (true);
+}
+
 std::string formatField(const std::string& input) {
     if (input.length() > 10)
         return input.substr(0, 9) + ".";
@@ -41,19 +52,8 @@ std::string formatField(const std::string& input) {
         return input;
 }
 
-void    AddContact(Phonebook &phonebook, Contact &contact) {
+void    CheckPhonebookLimit(Phonebook &phonebook) {
     int i = 7;
-    std::cout << RED << "ENTRER FIRST NAME :" << std::endl << RESET;
-    std::cin >> phonebook.arr[phonebook.quantity].fname;
-    std::cout << RED "ENTRER LAST NAME :" << std::endl << RESET;
-    std::cin >> phonebook.arr[phonebook.quantity].lname;
-    std::cout << RED "ENTRER SURNAME :" << std::endl << RESET;
-    std::cin >> phonebook.arr[phonebook.quantity].surname;
-    std::cout << RED "ENTRER PHONENUMBER :" << std::endl << RESET;
-    std::cin >> phonebook.arr[phonebook.quantity].number;
-    std::cout << RED "ENTRER SECRET :" << std::endl << RESET;
-    std::cin >> phonebook.arr[phonebook.quantity].secret;
-    phonebook.quantity++;
     if (phonebook.quantity == 9)
     {
         while (i > 0)
@@ -66,27 +66,59 @@ void    AddContact(Phonebook &phonebook, Contact &contact) {
     }
 }
 
-void    SecondPrompt(Phonebook &phonebook) {
+int    AddContact(Phonebook &phonebook, Contact &contact) {
+    std::cout << MAGENTA << "ENTRER FIRST NAME :" << std::endl << RESET;
+    if (!prompt_line(phonebook.arr[phonebook.quantity].fname))
+        return (1);
+    std::cout << MAGENTA "ENTRER LAST NAME :" << std::endl << RESET;
+    if (!prompt_line(phonebook.arr[phonebook.quantity].lname))
+        return (1);
+    std::cout << MAGENTA "ENTRER SURNAME :" << std::endl << RESET;
+    if (!prompt_line(phonebook.arr[phonebook.quantity].surname))
+        return (1);
+    std::cout << MAGENTA "ENTRER PHONENUMBER :" << std::endl << RESET;
+    if (!prompt_line(phonebook.arr[phonebook.quantity].number))
+        return (1);
+    std::cout << MAGENTA "ENTRER SECRET :" << std::endl << RESET;
+    if (!prompt_line(phonebook.arr[phonebook.quantity].secret))
+        return (1);
+    phonebook.quantity++;
+    CheckPhonebookLimit(phonebook);
+    return (0);
+}
+
+int    SecondPrompt(Phonebook &phonebook) {
     int i = 0;
-    int input;
-    std::cout << CYAN << "SELECT A CONTACT" << std::endl << RESET;
-    while (!(std::cin >> input) || input >= phonebook.quantity) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Invalid input. Please try again.";
+    std::string input;
+    int index = 0;
+    std::cout << MAGENTA << "SELECT A CONTACT" << std::endl << RESET;
+        while (true) {
+        if (!prompt_line(input))
+            return 1;
+        if (input.empty() || !std::all_of(input.begin(), input.end(), ::isdigit)) {
+            std::cout << "Invalid input. Please enter a number." << std::endl;
+            continue;
+        }
+        index = std::stoi(input);
+        if (index < 0 || index >= phonebook.quantity) {
+            std::cout << "Index out of range. Please enter 0 to " << phonebook.quantity - 1 << "." << std::endl;
+            continue;
+        }
+        break;
     }
-    std::cout << CYAN << "CONTACT [" << input << "]'S FULL DETAILS:" << std::endl << RESET;
-    std::cout << std::setw(10) << "Index" << "|" << input << std::endl;
-    std::cout << std::setw(10) << "First Name" << "|" << phonebook.arr[input].fname << std::endl;
-    std::cout << std::setw(10) << "Last Name" << "|" << phonebook.arr[input].lname << std::endl;
-    std::cout << std::setw(10) << "Surname" << "|" << phonebook.arr[input].surname << std::endl;
-    std::cout << std::setw(10) << "Number" << "|" << phonebook.arr[input].number << std::endl;
-    std::cout << std::setw(10) << "Secret" << "|" << phonebook.arr[input].secret << std::endl;
+    std::cout << MAGENTA << "CONTACT [" << index << "]'S FULL DETAILS:" << std::endl << RESET;
+    std::cout << std::setw(10) << "Index" << "|" << index << std::endl;
+    std::cout << std::setw(10) << "First Name" << "|" << phonebook.arr[index].fname << std::endl;
+    std::cout << std::setw(10) << "Last Name" << "|" << phonebook.arr[index].lname << std::endl;
+    std::cout << std::setw(10) << "Surname" << "|" << phonebook.arr[index].surname << std::endl;
+    std::cout << std::setw(10) << "Number" << "|" << phonebook.arr[index].number << std::endl;
+    std::cout << std::setw(10) << "Secret" << "|" << phonebook.arr[index].secret << std::endl;
+    return (0);
 }
 
 void    PrintSearchResults(Phonebook &phonebook) {
     int i = 0;
-    std::cout << "SEARCH CONTACTS :" << std::endl;
+    std::cout << MAGENTA << std::endl << "SEARCH CONTACTS :" << std::endl << RESET;
     std::cout << std::setw(10) << "Index" << "|" << std::setw(10) << "First Name" << "|" << std::setw(10) << "Last Name" << "|" << std::setw(10) << "Surname" << "|" << std::endl;
     std::cout << "----------|----------|----------|----------|" << std::endl;
     while(i < phonebook.quantity) {
@@ -101,7 +133,7 @@ void    PrintSearchResults(Phonebook &phonebook) {
 }
 
 int    ExitPhonebook(Phonebook &phonebook) {
-    std::cout << "Exit Phonebook. Your contacts have been erased." << std::endl;
+    std::cout << MAGENTA << "EXIT PHONEBOOK " << RED "Your contacts have been erased!" << std::endl << RESET;
     return (0);
 }
 
@@ -110,12 +142,13 @@ int main() {
     Contact contact;
     std::string input;
     int exit = 1;
-    std::cout << CYAN << "--------------------" << std::endl;
-    std::cout << "MY AWESOME PHONEBOOK" << std::endl;
-    std::cout << "--------------------" << std::endl << RESET;
+    std::cout << CYAN << BOLD << "╔══════════════════════╗" << std::endl;
+    std::cout << CYAN << BOLD << "║ MY AWESOME PHONEBOOK ║" << std::endl;
+    std::cout << CYAN << BOLD << "╚══════════════════════╝" << RESET;
     while (exit) {
-        std::cout << CYAN << "Please enter ADD, SEARCH or EXIT" << std::endl << RESET;
-        std::cin >> input;
+        std::cout << CYAN << std::endl << "Please enter ADD, SEARCH or EXIT" << std::endl << RESET;
+        if (!prompt_line(input))
+            return (1);
         if (input == "ADD")
             AddContact(phonebook, contact);
         else if (input == "SEARCH")
@@ -125,4 +158,5 @@ int main() {
         else
             std::cout << "Please select a valid option." << std::endl << std::endl;
     }
+    return (0);
 }
