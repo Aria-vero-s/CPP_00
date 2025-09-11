@@ -1,47 +1,42 @@
-#include "student.hpp"
+#include <iostream>
+using namespace std;
+
+const int NUM_GRADES = 3;
+
+class Student {
+public:
+    string name;
+    int grades[NUM_GRADES];
+
+    // Constructor with defaults
+    Student(string initName = "Unnamed", int initGrades[] = nullptr) {
+        name = initName;
+        if (initGrades != nullptr) {
+            for (int i = 0; i < NUM_GRADES; i++) {
+                cout << "if" << endl;
+                grades[i] = initGrades[i];
+            }
+        } else {
+            for (int i = 0; i < NUM_GRADES; i++) {
+                cout << "else" << endl;
+                grades[i] = 0; // safe default
+            }
+        }
+    }
+
+    void printGrades() {
+        cout << name << "'s grades: ";
+        for (int g : grades) cout << g << " ";
+        cout << endl;
+    }
+};
 
 int main() {
-    Student arr[NUM_STUDENTS];
-    int j = 0;
-    int input = 0;
-    int student = 0;
-    int temp = 0;
-    int average = 0;
+    int paulGrades[NUM_GRADES] = {10, 10, 10};
+    Student s1("Paul", paulGrades); // uses Paul's grades
+    cout << "test" << endl;
+    Student s2;                     // no grades passed → defaults to 0
 
-    inputStudents(arr, NUM_STUDENTS);
-    enterGrades(arr, NUM_STUDENTS);
-    while (1)
-    {
-        cout << "Select an option:" << endl << "[1]view a student's average grade" << endl;
-        cout << "[2]modify an existing student's name" << endl << "[3]display the highest average student" << endl;
-        cout << "[4]View all student's average" << endl << "[5]exit" << endl;
-        cin >> input;
-        if (input == 1)
-        {
-            student = chooseStudent(arr, NUM_STUDENTS);
-            cout << arr[student].name << "'s average is: " << arr[student].calcAverage() << endl;
-        }
-        else if (input == 2)
-        {
-            student = chooseStudent(arr, NUM_STUDENTS);
-            cout << "Type new name for :" << arr[student].name << endl;
-            cin >> arr[student].name;
-            cout << "Changed student's name to:" << arr[student].name << endl;
-        }
-        else if (input == 3)
-        {
-            j = findHighestAverage(arr, NUM_STUDENTS);
-            cout << "The highest average goes to... " << arr[j].name << "!" << endl;
-        }
-        else if (input == 4)
-            allStudentsAverage(arr, NUM_STUDENTS);
-        else if (input == 5)
-        {
-            cout << "bye!" << endl;
-            break;
-        }
-        else   
-            cout << "please type a valid option (1,2,3 or 4)" << endl;
-    }
-    return 0;
+    s1.printGrades(); // Paul’s grades: 10 10 10
+    s2.printGrades(); // Unnamed’s grades: 0 0 0
 }

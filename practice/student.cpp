@@ -1,10 +1,27 @@
 #include "student.hpp"
 
+Student::Student(string studentName, int initGrades[NUM_GRADES]) {
+    name = studentName;
+    if (initGrades != nullptr) {
+        for (int i = 0; i < NUM_GRADES; i++)
+            grades[i] = initGrades[i];
+    } else {
+        for (int i = 0; i < NUM_GRADES; i++)
+            grades[i] = 0; // default to 0
+    }
+}
+
 int Student::calcAverage() {
     int sum = 0;
     for (int i = 0; i < NUM_GRADES; i++)
         sum = sum + grades[i];
     return sum / NUM_GRADES;
+}
+
+void displayAverage(Student arr[], int size) {
+    int student = 0;
+    student = chooseStudent(arr, NUM_STUDENTS);
+    cout << arr[student].name << "'s average is: " << arr[student].calcAverage() << endl;
 }
 
 int chooseStudent(Student arr[], int size) {
@@ -29,6 +46,14 @@ int chooseStudent(Student arr[], int size) {
             break;
     }
     return (student);
+}
+
+void    changeName(Student arr[], int size) {
+    int student = 0;
+    student = chooseStudent(arr, NUM_STUDENTS);
+    cout << "Type new name for :" << arr[student].name << endl;
+    cin >> arr[student].name;
+    cout << "Changed student's name to:" << arr[student].name << endl;
 }
 
 void inputStudents(Student arr[], int size) {
@@ -59,7 +84,7 @@ void enterGrades(Student arr[], int size) {
     cout << "Great! You've entered the grades of all 3 students" << endl;
 }
 
-int findHighestAverage(Student arr[], int size) {
+void findHighestAverage(Student arr[], int size) {
     int i = 0;
     int j = 0;
     int average = 0;
@@ -81,7 +106,8 @@ int findHighestAverage(Student arr[], int size) {
         else
             j++;
     }
-    return (j);
+    cout << "The highest average goes to... " << arr[j].name << "!" << endl;
+    return ;
 }
 
 void allStudentsAverage(Student arr[], int size) {
@@ -96,4 +122,17 @@ void allStudentsAverage(Student arr[], int size) {
         cout << "---------------" << endl;
         i++;
     }
+}
+
+void    display_menu() 
+{
+    cout << "Select an option:" << endl << "[1]view a student's average grade" << endl;
+    cout << "[2]modify an existing student's name" << endl << "[3]display the highest average student" << endl;
+    cout << "[4]View all student's average" << endl << "[5]exit" << endl;
+}
+
+int f_exit()
+{
+    cout << "bye!" << endl;
+    return (0);
 }

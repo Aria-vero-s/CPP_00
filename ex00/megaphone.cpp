@@ -1,19 +1,4 @@
-// Copyright 2025 Ariane Saulnier
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cpp1.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: asaulnie <asaulnie@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 18:32:12 by asaulnie          #+#    #+#             */
-/*   Updated: 2025/08/20 20:19:10 by asaulnie         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <iostream>
-using namespace std;
 
 int main(int argc, char **argv) {
   int i;
@@ -23,7 +8,7 @@ int main(int argc, char **argv) {
   i = 1;
   j = 0;
   if (argc == 1) {
-    cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << endl;
+    std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << std::endl;
     return (0);
   }
   while (i < argc)
@@ -34,12 +19,12 @@ int main(int argc, char **argv) {
       c = argv[i][j];
       if (c >= 'a' && c <= 'z')
         c = c - 32;
-      cout << c;
+      std::cout << c;
       j++;
     }
-    cout << " ";
+    std::cout << " ";
     i++;
   }
-  cout << endl;
+  std::cout << std::endl;
   return (0);
 }
