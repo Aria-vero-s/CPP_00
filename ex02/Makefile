@@ -1,9 +1,9 @@
-NAME = phonebook
+NAME = dreamjob
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRCS = Phonebook.cpp Contact.cpp Main.cpp
+SRCS = Account.cpp tests.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)

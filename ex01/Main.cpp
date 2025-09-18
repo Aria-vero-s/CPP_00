@@ -161,7 +161,7 @@ void    PrintSearchResults(Phonebook &phonebook) {
 
 int    ExitPhonebook() {
     std::cout << MAGENTA << "EXIT PHONEBOOK " << std::endl;
-    std::cout << RED << BOLD << "ALL CONTACTS ERASED (FOREVER!)" << std::endl << RESET;
+    std::cout << RED << "All contacts erased!" << std::endl << RESET;
     return (0);
 }
 
