@@ -1,32 +1,21 @@
 #include <iostream>
-#include <string>
+using namespace std;
 
-class Book {
-    private:
-        std::string title;
-
-    public:
-        Book(std::string t) {
-            setTitle(t);
-        }
-
-        std::string    getTitle() {
-            return(title);
-        }
-
-        void    setTitle(std::string t) {
-            title = t;
-        }
+class MyClass {
+public:
+    int x;
+    MyClass(int val) : x(val) { cout << "Ctor " << x << endl; }
+    ~MyClass() { cout << "Dtor " << x << endl; }
 };
 
+void baz(MyClass* obj) { 
+    obj->x += 5; 
+    cout << "baz " << obj->x << endl; 
+}
+
 int main() {
-    Book myBook("C++ for Beginners");
-
-    std::cout << myBook.getTitle() << std::endl;
-
-    myBook.setTitle("Advanced C++");
-
-    std::cout << myBook.getTitle() << std::endl;
-
-    return 0;
+    MyClass* a = new MyClass(10);
+    baz(a);
+    cout << "main " << a->x << endl;
+    delete a;
 }
